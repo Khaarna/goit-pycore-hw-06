@@ -13,18 +13,34 @@ class Name(Field):
     """Class for storing contact name. Required field."""
     
     def __init__(self, value):
+        super().__init__(value)
+    
+    @property
+    def value(self):
+        return self._value
+    
+    @value.setter
+    def value(self, value):
         if not value or not value.strip():
             raise ValueError("Name cannot be empty")
-        super().__init__(value)
+        self._value = value
 
 
 class Phone(Field):
     """Class for storing phone number with validation (10 digits)."""
     
     def __init__(self, value):
+        super().__init__(value)
+    
+    @property
+    def value(self):
+        return self._value
+    
+    @value.setter
+    def value(self, value):
         if not self.validate(value):
             raise ValueError("Phone number must contain exactly 10 digits")
-        super().__init__(value)
+        self._value = value
     
     @staticmethod
     def validate(value):
@@ -53,9 +69,7 @@ class Record:
         """Edit an existing phone number."""
         phone_to_edit = self.find_phone(old_phone)
         if phone_to_edit:
-            # Validate by creating Phone object (raises ValueError if invalid)
-            new_phone_obj = Phone(new_phone)
-            phone_to_edit.value = new_phone_obj.value
+            phone_to_edit.value = new_phone
         else:
             raise ValueError(f"Phone {old_phone} not found")
     
